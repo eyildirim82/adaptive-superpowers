@@ -1,63 +1,86 @@
 ---
 name: using-superpowers
-description: Use when starting any conversation - establishes how to find and use skills, requiring skill invocation before ANY response including clarifying questions
+description: Use when starting a coding or software-development task that may need Superpowers process or domain skills.
 ---
 
-<SUBAGENT-STOP>
-If you were dispatched as a subagent to execute a specific task, ignore this skill.
-</SUBAGENT-STOP>
+# Adaptive Superpowers Orchestrator
 
-<EXTREMELY-IMPORTANT>
-If you think there is even a 1% chance a skill might apply to what you are doing, you ABSOLUTELY MUST invoke the skill.
+Superpowers is risk-adaptive. The orchestrator chooses the smallest process that can produce trustworthy evidence without crossing an unauthorized effect boundary.
 
-IF A SKILL APPLIES TO YOUR TASK, YOU DO NOT HAVE A CHOICE. YOU MUST USE IT.
+## Global invariants
 
-This is not negotiable. You cannot rationalize your way out of this.
-</EXTREMELY-IMPORTANT>
+### Evidence Before Claims
+Never claim a property that fresh evidence does not establish. A skipped test means the result is unverified, not passing.
 
-## The Rule
+### Authorized Effects Only
+Never perform an external, destructive, security-sensitive, or irreversible effect outside authority already granted by the user/task.
 
-**Invoke relevant or requested skills BEFORE any response or action** — including clarifying questions, exploring the codebase, or checking files. If it turns out wrong for the situation, you don't have to use it.
+These are invariants. Brainstorming, planning, TDD, review, worktrees, parallelism, and finishing are policies.
 
-**Before entering plan mode:** if you haven't already brainstormed, invoke the brainstorming skill first.
+## Risk Router
 
-Then announce "Using [skill] to [purpose]" and follow the skill exactly. If it has a checklist, create a todo per item.
+Classify each task before process routing:
 
-## Skill Priority
+- **FAST** — local, reversible, narrow, understood, with a clear verification surface.
+- **STANDARD** — normal engineering work: features, multi-file changes, ordinary integrations, or uncertain-but-reversible work.
+- **CRITICAL** — any hard trigger or discovered high-consequence boundary. CRITICAL means stronger controls, not "ask before doing anything."
 
-When multiple skills apply, process skills come first — they set the approach, then implementation skills (frontend-design, etc.) carry it out. Brainstorming and systematic-debugging are Superpowers' most common process skills, but the rule holds for any of them.
+Use the hard triggers and examples in `references/risk-policy.md` when classification is not obvious.
 
-- "Let's build X" → superpowers:brainstorming first, then implementation skills.
-- "Fix this bug" → superpowers:systematic-debugging first, then domain skills.
+**Risk is not permission.** A CRITICAL action may already be authorized; an unauthorized external effect is still unauthorized even if the task looks FAST.
 
-## Red Flags
+## Risk floor and escalation
 
-These thoughts mean STOP—you're rationalizing:
+A parent/coordinator may pass a **risk floor** to child work. A child may classify at or above that floor, never below it. Risk may escalate when new evidence appears; do not silently de-escalate during the same task.
 
-| Thought | Reality |
-|---------|---------|
-| "This is just a simple question" | Questions are tasks. Check for skills. |
-| "I need more context first" | Skill check comes BEFORE clarifying questions. |
-| "Let me explore the codebase first" | Skills tell you HOW to explore. Check first. |
-| "I can check git/files quickly" | Files lack conversation context. Check for skills. |
-| "Let me gather information first" | Skills tell you HOW to gather information. |
-| "This doesn't need a formal skill" | If a skill exists, use it. |
-| "I remember this skill" | Skills evolve. Read current version. |
-| "This doesn't count as a task" | Action = task. Check for skills. |
-| "The skill is overkill" | Simple things become complex. Use it. |
-| "I'll just do this one thing first" | Check BEFORE doing anything. |
-| "This feels productive" | Undisciplined action wastes time. Skills prevent this. |
-| "I know what that means" | Knowing the concept ≠ using the skill. Invoke it. |
+When risk escalates, state the reason briefly and strengthen the active profile. Escalation alone is not an approval stop.
+
+## Execution profile
+
+Use compact policy modes rather than dozens of booleans:
+
+| Dimension | FAST | STANDARD | CRITICAL |
+|---|---|---|---|
+| design | none / intent | short-design | persistent-spec when useful |
+| planning | none | lightweight | persistent |
+| workspace | current-ok | isolated-preferred | isolated-required |
+| TDD | opportunistic | default | strict for behavior |
+| debugging | short-root-cause | evidence-driven | full-tracing |
+| parallelism | off | net-benefit | contract-required |
+| review | self | risk-based | independent-required |
+| ledger | off | conditional | required |
+| verification | targeted | relevant | canonical |
+| integration | obey authorization | obey authorization | obey authorization |
+
+Risk level controls required safeguards, not document length. A one-line security boundary change can be CRITICAL; a large documentation refactor can remain STANDARD.
+
+## Skill routing
+
+**process skills are policies.** Invoke only the process/domain skills needed by the active profile. A legacy `REQUIRED`, `MUST`, or named-skill instruction means "apply this capability at the active profile-selected strength"; it does not create a stronger workflow by itself.
+
+Domain skills can be added independently of process severity. For frontend/UI intent, use the `impeccable` domain skill when available and apply `references/impeccable-adapter.md`; Adaptive risk and authorization remain authoritative.
+
+If a process skill discovers a new hard trigger, route that discovery back through the Risk Router and escalate.
+
+## User interaction
+
+- FAST and STANDARD: state a compact intent/profile when useful, then proceed. Do not insert routine implementation-approval gates.
+- CRITICAL: state the risk reason and the effect boundary that may require authorization, then continue with reversible preparation, tests, rehearsal, and review.
+- Ask only when a genuinely unresolved product/design choice is required, every safe path is a guess, or an unauthorized effect boundary is reached.
+- Reuse authorization already granted; do not ask twice for the same effect.
+
+## Legacy compatibility
+
+Existing skill names stay valid. Existing plans can still name `brainstorming`, `test-driven-development`, `requesting-code-review`, `executing-plans`, and the rest. Those skills consume this execution profile rather than overriding it with unconditional ceremony.
 
 ## Platform Adaptation
 
-If your harness appears here, read its reference file for special instructions:
+Load only the mapping for the runtime actually in use; do not force-load every reference into context.
 
 - Codex: `references/codex-tools.md`
 - Pi: `references/pi-tools.md`
 - Antigravity: `references/antigravity-tools.md`
-- Hermes Agent: `references/hermes-tools.md`
+- Hermes: `references/hermes-tools.md`
+- Gemini: `references/gemini-tools.md`
 
-## User Instructions
-
-User instructions (CLAUDE.md, AGENTS.md, GEMINI.md, etc, direct requests) take precedence over skills, which in turn override default behavior. Only skip skill workflows or instructions when your human partner has explicitly told you to.
+These mappings adapt tool names and harness behavior. They do not change the active risk, authorization, or execution profile.

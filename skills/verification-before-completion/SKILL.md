@@ -1,120 +1,35 @@
 ---
 name: verification-before-completion
-description: Use when about to claim work is complete, fixed, or passing, before committing or creating PRs - requires running verification commands and confirming output before making any success claims; evidence before assertions always
+description: Use before claiming that work is complete, fixed, passing, safe, or ready for integration.
 ---
 
 # Verification Before Completion
 
-## Overview
+## Evidence Before Claims
 
-**Core principle:** Evidence before claims, always.
+Never claim a property that **fresh** evidence does not establish. This is a global truthfulness invariant, not optional ceremony.
 
-**Violating the letter of this rule is violating the spirit of this rule.**
+Before a claim:
+1. Identify the command, inspection, rehearsal, or evidence that proves that specific claim.
+2. Run/obtain it fresh against the tree/state being claimed.
+3. Read the complete relevant result and exit/status signal.
+4. State exactly what the evidence proves — no more.
 
-## The Iron Law
+Examples:
+- "tests pass" requires a fresh successful test run;
+- "build succeeds" requires a fresh build result;
+- "bug fixed" requires the original symptom/regression evidence;
+- "production parity verified" requires an actual parity check;
+- "requirements met" requires checking the applicable requirements, not merely a green unit test.
 
-```
-NO COMPLETION CLAIMS WITHOUT FRESH VERIFICATION EVIDENCE
-```
+## Profile-selected verification depth
 
-If you haven't run the verification command in this message, you cannot claim it passes.
+- **targeted (FAST):** the narrow proof that establishes the changed behavior/property.
+- **relevant (STANDARD):** targeted proof plus the affected suite/build/typecheck/lint surfaces that materially constrain the change.
+- **canonical (CRITICAL):** the repository/domain verification matrix, rehearsal/parity checks, and independent evidence appropriate to the risk.
 
-## The Gate Function
+Verification depth is adaptive; truthfulness is not. If a suite cannot run because a dependency/tool is unavailable, report it as **not run** with the reason. Never convert absence of evidence into a pass.
 
-```
-BEFORE claiming any status or expressing satisfaction:
+## Delegated work
 
-1. IDENTIFY: What command proves this claim?
-2. RUN: Execute the FULL command (fresh, complete)
-3. READ: Full output, check exit code, count failures
-4. VERIFY: Does output confirm the claim?
-   - If NO: State actual status with evidence
-   - If YES: State claim WITH evidence
-5. ONLY THEN: Make the claim
-
-Skip any step = lying, not verifying
-```
-
-## Common Failures
-
-| Claim | Requires | Not Sufficient |
-|-------|----------|----------------|
-| Tests pass | Test command output: 0 failures | Previous run, "should pass" |
-| Linter clean | Linter output: 0 errors | Partial check, extrapolation |
-| Build succeeds | Build command: exit 0 | Linter passing, logs look good |
-| Bug fixed | Test original symptom: passes | Code changed, assumed fixed |
-| Regression test works | Red-green cycle verified | Test passes once |
-| Agent completed | VCS diff shows changes | Agent reports "success" |
-| Requirements met | Line-by-line checklist | Tests passing |
-
-## Red Flags - STOP
-
-- Using "should", "probably", "seems to"
-- Expressing satisfaction before verification ("Great!", "Perfect!", "Done!", etc.)
-- About to commit/push/PR without verification
-- Trusting agent success reports
-- Relying on partial verification
-- Thinking "just this once"
-- Tired and wanting work over
-- **ANY wording implying success without having run verification**
-
-## Rationalization Prevention
-
-| Excuse | Reality |
-|--------|---------|
-| "Should work now" | RUN the verification |
-| "I'm confident" | Confidence ≠ evidence |
-| "Just this once" | No exceptions |
-| "Linter passed" | Linter ≠ compiler |
-| "Agent said success" | Verify independently |
-| "I'm tired" | Exhaustion ≠ excuse |
-| "Partial check is enough" | Partial proves nothing |
-| "Different words so rule doesn't apply" | Spirit over letter |
-
-## Key Patterns
-
-**Tests:**
-```
-✅ [Run test command] [See: 34/34 pass] "All tests pass"
-❌ "Should pass now" / "Looks correct"
-```
-
-**Regression tests (TDD Red-Green):**
-```
-✅ Write → Run (pass) → Revert fix → Run (MUST FAIL) → Restore → Run (pass)
-❌ "I've written a regression test" (without red-green verification)
-```
-
-**Build:**
-```
-✅ [Run build] [See: exit 0] "Build passes"
-❌ "Linter passed" (linter doesn't check compilation)
-```
-
-**Requirements:**
-```
-✅ Re-read plan → Create checklist → Verify each → Report gaps or completion
-❌ "Tests pass, phase complete"
-```
-
-**Agent delegation:**
-```
-✅ Agent reports success → Check VCS diff → Verify changes → Report actual state
-❌ Trust agent report
-```
-
-## When To Apply
-
-**ALWAYS before:**
-- ANY variation of success/completion claims
-- ANY expression of satisfaction
-- ANY positive statement about work state
-- Committing, PR creation, task completion
-- Moving to next task
-- Delegating to agents
-
-**Rule applies to:**
-- Exact phrases
-- Paraphrases and synonyms
-- Implications of success
-- ANY communication suggesting completion/correctness
+Do not trust an agent's success statement by itself. Inspect the produced diff/state and run the profile-selected fresh verification before reporting completion.

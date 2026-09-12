@@ -1,0 +1,15 @@
+{
+  "expected_risk": "FAST",
+  "must_contain": [
+    "FAST"
+  ],
+  "must_not_contain": [
+    "approve",
+    "approval",
+    "shall I continue",
+    "wait for your confirmation"
+  ],
+  "max_user_stops": 0,
+  "max_reviewer_dispatches": 0,
+  "max_plan_artifacts": 0
+}

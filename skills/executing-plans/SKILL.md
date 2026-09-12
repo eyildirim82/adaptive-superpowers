@@ -1,64 +1,33 @@
 ---
 name: executing-plans
-description: Use when you have a written implementation plan to execute in a separate session with review checkpoints
+description: Use when a written implementation plan should be carried through in the current or separate execution session.
 ---
 
 # Executing Plans
 
-## Overview
+Read the authoritative spec/plan and execute coherent change units under the active Adaptive Superpowers profile.
 
-Load plan, review critically, execute all tasks, report when complete.
+## Start
+- Confirm the relevant plan/spec paths and current Git/workspace state.
+- Honor branch/base/ownership contracts exactly.
+- Use the profile-selected workspace mode; never silently rewrite a frozen base or shared ownership contract.
+- Create lightweight todos/ledger entries only when the active `ledger.mode` needs them.
 
-**Announce at start:** "I'm using the executing-plans skill to implement this plan."
+## Execution loop
+For each coherent task/lane:
+1. Re-read the task's requirement and interfaces.
+2. Apply profile-selected TDD/debugging/review depth.
+3. Make reversible rulings when the spec/plan leaves a reasonable safe choice; record material rulings in the ledger when enabled.
+4. Run the task's relevant verification before marking it complete.
+5. Continue without routine "should I continue?" stops.
 
-**Note:** Tell your human partner that Superpowers works much better with access to subagents (Claude Code, Codex CLI, Codex App, Copilot CLI, and Gemini CLI all qualify; see the per-platform tool refs in `../using-superpowers/references/`). If subagents are available, use superpowers:subagent-driven-development instead of this skill.
+## Stop conditions
+Stop only when:
+- an unauthorized irreversible/destructive/security-sensitive external effect is reached;
+- an external side effect requires permission not already granted;
+- every reasonable path forward is guesswork because authority/spec/repo reality is unrecoverably ambiguous.
 
-## The Process
+Ordinary blockers, plan defects, or small ambiguities should trigger investigation and a reversible ruling when a defensible path exists, not an automatic human stall.
 
-### Step 1: Load and Review Plan
-1. Ensure an isolated workspace: use superpowers:using-git-worktrees to create one or verify the existing one
-2. Read plan file
-3. Review critically - identify any questions or concerns about the plan
-4. If concerns: Raise them with your human partner before starting
-5. If no concerns: Create todos for the plan items and proceed
-
-### Step 2: Execute Tasks
-
-For each task:
-1. Mark as in_progress
-2. Follow each step exactly (plan has bite-sized steps)
-3. Run verifications as specified
-4. Mark as completed
-
-### Step 3: Complete Development
-
-After all tasks complete and verified:
-- Announce: "I'm using the finishing-a-development-branch skill to complete this work."
-- **REQUIRED SUB-SKILL:** Use superpowers:finishing-a-development-branch
-- Follow that skill to verify tests, present options, execute choice
-
-## When to Stop and Ask for Help
-
-**STOP executing immediately when:**
-- Hit a blocker (missing dependency, test fails, instruction unclear)
-- Plan has critical gaps preventing starting
-- You don't understand an instruction
-- Verification fails repeatedly
-
-**Ask for clarification rather than guessing.**
-
-## When to Revisit Earlier Steps
-
-**Return to Review (Step 1) when:**
-- Partner updates the plan based on your feedback
-- Fundamental approach needs rethinking
-
-**Don't force through blockers** - stop and ask.
-
-## Remember
-- Review plan critically first
-- Follow plan steps exactly
-- Don't skip verifications
-- Reference skills when plan says to
-- Stop when blocked, don't guess
-- Never start implementation on main/master branch without explicit user consent
+## Completion
+Use the intent-aware finishing policy after fresh verification. The plan does not imply push, merge, PR, deploy, or destructive cleanup unless those effects are already authorized by task intent.

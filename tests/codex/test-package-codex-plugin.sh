@@ -122,6 +122,11 @@ write_metadata_fixture() {
   local skill
 
   while IFS= read -r skill; do
+    # Skills with source-owned OpenAI metadata intentionally have no entry in
+    # the prior metadata fixture; packaging must preserve the source version.
+    if [[ -f "$REPO_ROOT/skills/$skill/agents/openai.yaml" ]]; then
+      continue
+    fi
     mkdir -p "$destination/skills/$skill/agents"
     cat >"$destination/skills/$skill/agents/openai.yaml" <<EOF
 interface:
@@ -168,6 +173,13 @@ assert_not_matches "$archive_paths" "$unexpected_pattern" "archive excludes sour
 assert_contains "$archive_paths" ".codex-plugin/plugin.json" "archive includes Codex manifest"
 assert_contains "$archive_paths" "skills/brainstorming/SKILL.md" "archive includes skills"
 assert_contains "$archive_paths" "skills/brainstorming/agents/openai.yaml" "archive includes OpenAI skill metadata"
+assert_contains "$archive_paths" "skills/impeccable/SKILL.md" "archive includes vendored Impeccable skill"
+assert_contains "$archive_paths" "skills/impeccable/agents/openai.yaml" "archive includes source-owned Impeccable OpenAI metadata"
+assert_contains "$archive_paths" "skills/impeccable/LICENSE" "archive includes Impeccable Apache license"
+assert_contains "$archive_paths" "skills/impeccable/NOTICE.md" "archive includes Impeccable notice"
+source_impeccable_metadata="$(cat "$REPO_ROOT/skills/impeccable/agents/openai.yaml")"
+archive_impeccable_metadata="$(read_archive_file "$archive" skills/impeccable/agents/openai.yaml)"
+assert_equals "$archive_impeccable_metadata" "$source_impeccable_metadata" "source-owned Impeccable metadata is preserved"
 assert_contains "$archive_paths" "assets/app-icon.png" "archive includes app icon"
 assert_contains "$archive_paths" "assets/superpowers-small.svg" "archive includes composer icon"
 

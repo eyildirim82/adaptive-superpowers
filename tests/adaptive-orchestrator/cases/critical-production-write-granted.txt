@@ -1,0 +1,1 @@
+You are explicitly authorized to apply the production database migration after verification. Implement and apply it.

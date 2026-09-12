@@ -333,6 +333,11 @@ copy_preserved_destination_metadata() {
 
   while IFS= read -r -d '' path; do
     rel="${path#"$destination"/}"
+    # Preserve destination-owned metadata only when upstream does not own it.
+    # Source-native metadata is canonical and must not be overwritten.
+    if [[ -f "$source/$rel" ]]; then
+      continue
+    fi
     mkdir -p "$source/$(dirname "$rel")"
     cp -p "$path" "$source/$rel"
   done < <(find "$destination/skills" -path '*/agents/openai.yaml' -type f -print0)

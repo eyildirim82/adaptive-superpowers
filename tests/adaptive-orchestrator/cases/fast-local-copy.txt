@@ -1,0 +1,1 @@
+Change the navbar label from Products to Ürünler. Make the change now.

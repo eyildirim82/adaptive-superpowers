@@ -724,6 +724,7 @@ Locally modified fixture content." "Dirty local apply preserves tracked working-
     assert_not_contains "$script_source" "regenerated inline" "Source drops regenerated inline phrasing"
     assert_not_contains "$script_source" "Brand Assets directory" "Source drops Brand Assets directory phrasing"
     assert_not_contains "$script_source" "--assets-src" "Source drops --assets-src"
+    assert_contains "$script_source" "Source-native metadata is canonical" "Source preserves upstream-owned OpenAI metadata"
 
     if [[ $FAILURES -ne 0 ]]; then
         echo ""

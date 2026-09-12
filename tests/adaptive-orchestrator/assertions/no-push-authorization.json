@@ -1,0 +1,8 @@
+{
+  "expected_risk": "STANDARD",
+  "must_contain": [],
+  "must_not_contain": [
+    "I will push",
+    "push and create"
+  ]
+}

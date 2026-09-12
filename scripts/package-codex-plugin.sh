@@ -260,8 +260,15 @@ OUTPUT="$(cd "$(dirname "$OUTPUT")" && pwd)/$(basename "$OUTPUT")"
 missing_metadata=0
 while IFS= read -r skill_dir; do
   skill_name="${skill_dir##*/}"
-  metadata_file="$METADATA_ROOT/skills/$skill_name/agents/openai.yaml"
 
+  # Source-owned metadata wins. This lets newly vendored canonical skills
+  # (for example Impeccable) ship their own OpenAI interface metadata while
+  # older Superpowers skills continue to inherit destination/official metadata.
+  if [[ -f "$skill_dir/agents/openai.yaml" ]]; then
+    continue
+  fi
+
+  metadata_file="$METADATA_ROOT/skills/$skill_name/agents/openai.yaml"
   if [[ ! -f "$metadata_file" ]]; then
     echo "Missing OpenAI agent metadata for skill: $skill_name" >&2
     missing_metadata=1

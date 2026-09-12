@@ -168,9 +168,20 @@ claude_home="$(make_home claude-code)"
 assert_command_output \
     "Claude Code emits nested SessionStart additionalContext" \
     "nested" \
-    "" \
+    "Adaptive Superpowers Orchestrator" \
     "" \
     "$claude_home" \
+    CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
+    bash "$HOOK_UNDER_TEST"
+
+
+bootstrap_home="$(make_home adaptive-bootstrap)"
+assert_command_output \
+    "SessionStart injects Adaptive Orchestrator invariants" \
+    "nested" \
+    "Evidence Before Claims" \
+    "" \
+    "$bootstrap_home" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"
 
@@ -212,7 +223,7 @@ assert_command_output \
     "SessionStart omits obsolete legacy custom-skill warning" \
     "nested" \
     "" \
-    "Superpowers now uses"$'\037'"~/.config/superpowers/skills"$'\037'"~/.claude/skills"$'\037'"legacy" \
+    "Superpowers now uses"$'\037'"~/.config/superpowers/skills"$'\037'"~/.claude/skills" \
     "$legacy_home" \
     CLAUDE_PLUGIN_ROOT="$REPO_ROOT" \
     bash "$HOOK_UNDER_TEST"

@@ -1,5 +1,35 @@
 # Superpowers Release Notes
 
+## Adaptive fork release (2026-09-13) — based on Superpowers v6.3.0
+
+### Adaptive Orchestrator
+
+- Replaced unconditional process ceremony with **FAST / STANDARD / CRITICAL** execution profiles selected by a hybrid Risk Router.
+- Added parent/session risk floors and escalation-only task behavior so delegated work cannot silently downgrade risk.
+- Reduced the framework-wide hard guarantees to two load-bearing invariants: **Evidence Before Claims** and **Authorized Effects Only**.
+- Separated risk from permission: CRITICAL work can continue through reversible preparation, tests, rehearsal, and review, and stops only at an unauthorized effect boundary or unrecoverable ambiguity.
+
+### Adaptive Engineering Policies
+
+- Brainstorming no longer inserts a blanket implementation-approval gate into FAST/STANDARD work.
+- TDD, debugging, planning, workspace isolation, parallelism, review, ledger use, and verification now scale with the active execution profile.
+- Review is risk/diff based; parallel worker flows default to lane-completion and integration review rather than one reviewer per micro-task.
+- Finishing is authorization-aware: already-granted Git effects are not re-confirmed, unknown push/merge/deploy effects are not invented, and destructive cleanup stays protected.
+- Legacy skill names and `REQUIRED SUB-SKILL` references remain compatible but consume the orchestrator-selected profile instead of overriding it.
+
+### Impeccable
+
+- Vendored canonical **Impeccable skill 4.3.1 (engine 0.1.5)** as the frontend/UI domain capability.
+- Preserved Impeccable's **Apache-2.0** license and `NOTICE.md`; upstream skill contents remain vendor-pure, while Adaptive integration rules live in a separate adapter reference.
+- Added profile-aware UI composition so precise/local UI fixes do not regain a generic approval gate, while genuinely unresolved visual-world choices can still surface to the user.
+- Updated Codex packaging/sync precedence so source-owned `agents/openai.yaml` metadata is preserved when a skill ships its own metadata.
+
+### Harness and Tests
+
+- Added deterministic Adaptive policy-contract tests and a behavior-eval runner that reports **not run** rather than pretending success when the Claude CLI is unavailable.
+- Updated Hermes bootstrap expectations to the Adaptive Orchestrator contract and restored explicit harness mapping links, including Antigravity.
+- Existing cross-harness package/sync contracts remain covered; environment-dependent suites are reported separately when required binaries are absent.
+
 ## v6.3.0 (2026-08-12)
 
 ### Harness Support

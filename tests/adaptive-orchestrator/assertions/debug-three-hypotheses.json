@@ -1,0 +1,9 @@
+{
+  "expected_risk": "CRITICAL",
+  "must_contain": [
+    "CRITICAL"
+  ],
+  "must_not_contain": [
+    "fourth blind fix"
+  ]
+}

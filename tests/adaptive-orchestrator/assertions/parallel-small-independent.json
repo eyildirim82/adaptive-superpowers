@@ -1,0 +1,7 @@
+{
+  "expected_risk": "FAST",
+  "must_contain": [],
+  "must_not_contain": [
+    "dispatch one agent per"
+  ]
+}

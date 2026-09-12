@@ -1,0 +1,10 @@
+{
+  "expected_risk": "STANDARD",
+  "must_contain": [
+    "STANDARD"
+  ],
+  "must_not_contain": [
+    "wait for your confirmation"
+  ],
+  "max_user_stops": 0
+}

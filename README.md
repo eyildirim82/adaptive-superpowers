@@ -1,6 +1,8 @@
-# Superpowers
+# Adaptive Superpowers
 
-Superpowers is a complete software development methodology for your coding agents, built on top of a set of composable skills and some initial instructions that make sure your agent uses them.
+Adaptive Superpowers is a risk-adaptive fork of [Superpowers](https://github.com/obra/superpowers) for coding agents. It keeps Superpowers' composable engineering skills, but replaces unconditional process ceremony with a central **FAST / STANDARD / CRITICAL** execution profile and adds [Impeccable](https://github.com/pbakaus/impeccable) as the canonical frontend/UI design capability.
+
+> **Fork status:** this repository is based on Superpowers v6.3.0. Existing Superpowers skill names remain compatible, but marketplace entries maintained by the upstream project install the upstream behavior, not this adaptive fork. Install this repository directly when you want the adaptive policy described below.
 
 ## Table of Contents
 
@@ -32,15 +34,20 @@ Superpowers is a complete software development methodology for your coding agent
 
 ## How it works
 
-It starts from the moment you fire up your coding agent. As soon as it sees that you're building something, it *doesn't* just jump into trying to write code. Instead, it steps back and asks you what you're really trying to do. 
+Every engineering task starts at the **Adaptive Orchestrator** in `using-superpowers`. It classifies risk, inherits any parent risk floor, and activates only the process strength needed for the work:
 
-Once it's teased a spec out of the conversation, it shows it to you in chunks short enough to actually read and digest. 
+- **FAST** — narrow, local, reversible work. Minimal ceremony, targeted verification, no routine reviewer or plan artifact.
+- **STANDARD** — normal feature and bug-fix work. Short design/planning when useful, TDD by default, relevant review and verification.
+- **CRITICAL** — hard-risk boundaries such as production writes, destructive data changes, authorization/security changes, secrets, or irreversible external effects. Stronger isolation, review, rehearsal, and canonical verification apply.
 
-After you've signed off on the design, your agent puts together an implementation plan that's clear enough for an enthusiastic junior engineer with poor taste, no judgement, no project context, and an aversion to testing to follow. It emphasizes true red/green TDD, YAGNI (You Aren't Gonna Need It), and DRY. 
+Two invariants sit above every profile:
 
-Next up, once you say "go", it launches a *subagent-driven-development* process, having agents work through each engineering task, inspecting and reviewing their work, and continuing forward. It's not uncommon for your agent to work autonomously for a couple hours at a time without deviating from the plan you put together.
+1. **Evidence Before Claims** — never claim a property that fresh evidence does not establish.
+2. **Authorized Effects Only** — never perform an external, destructive, security-sensitive, or irreversible effect outside authority already granted by the user/task.
 
-There's a bunch more to it, but that's the core of the system. And because the skills trigger automatically, you don't need to do anything special. Your coding agent just has Superpowers.
+CRITICAL does **not** mean “ask before doing anything.” Reversible preparation, tests, rehearsal, and review continue autonomously; the agent stops only at an unauthorized effect boundary, an unresolved material product choice, or a point where every safe path would be a guess. Risk and permission are tracked separately, so an already-authorized CRITICAL action is not re-approved merely because it is critical.
+
+For frontend/UI work, the orchestrator adds the vendored **Impeccable skill 4.3.1 (engine 0.1.5)** domain skill. Impeccable owns visual direction, layout, typography, responsive quality, accessibility-oriented visual checks, motion, and visual review; Adaptive Superpowers still owns risk, authorization, engineering verification, Git effects, and completion truthfulness.
 
 ## Commercial Services
 
@@ -48,7 +55,14 @@ If you're using Superpowers in enterprise and could benefit from commercial supp
 
 ## Installation
 
-Installation differs by harness. If you use more than one, install Superpowers separately for each one.
+Installation differs by harness. If you use more than one, install Adaptive Superpowers separately for each one. **Official Superpowers marketplace entries point to the upstream project.** To use this adaptive fork, install from `eyildirim82/adaptive-superpowers` wherever the harness supports GitHub/direct repository installs.
+
+For Claude Code, the repository carries a marketplace manifest, so the fork can be added directly:
+
+```bash
+/plugin marketplace add eyildirim82/adaptive-superpowers
+/plugin install superpowers@superpowers-dev
+```
 
 ### Claude Code
 
@@ -83,7 +97,7 @@ The Superpowers marketplace provides Superpowers and some other related plugins 
 Install Superpowers as a plugin from this repository:
 
 ```bash
-agy plugin install https://github.com/obra/superpowers
+agy plugin install https://github.com/eyildirim82/adaptive-superpowers
 ```
 
 Antigravity runs the plugin's session-start hook, so Superpowers is active from
@@ -130,7 +144,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the plugin from this repository:
 
   ```bash
-  devin plugins install obra/superpowers
+  devin plugins install eyildirim82/adaptive-superpowers
   ```
 
 - Update to the latest version with:
@@ -144,7 +158,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Register the marketplace:
 
   ```bash
-  droid plugin marketplace add https://github.com/obra/superpowers
+  droid plugin marketplace add https://github.com/eyildirim82/adaptive-superpowers
   ```
 
 - Install the plugin:
@@ -158,7 +172,7 @@ Superpowers is available via the [official Codex plugin marketplace](https://git
 - Install the extension:
 
   ```bash
-  gemini extensions install https://github.com/obra/superpowers
+  gemini extensions install https://github.com/eyildirim82/adaptive-superpowers
   ```
 
 - Update later:
@@ -212,7 +226,7 @@ Superpowers is available in Kimi Code's plugin marketplace.
 - Or install directly from this repository:
 
   ```text
-  /plugins install https://github.com/obra/superpowers
+  /plugins install https://github.com/eyildirim82/adaptive-superpowers
   ```
 
 - Detailed docs: [docs/README.kimi.md](docs/README.kimi.md)
@@ -225,7 +239,7 @@ already use it in another harness.
 - Tell OpenCode:
 
   ```
-  Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.opencode/INSTALL.md
+  Fetch and follow instructions from https://raw.githubusercontent.com/eyildirim82/adaptive-superpowers/refs/heads/main/.opencode/INSTALL.md
   ```
 
 - Detailed docs: [docs/README.opencode.md](docs/README.opencode.md)
@@ -235,7 +249,7 @@ already use it in another harness.
 Install Superpowers as a Pi package from this repository:
 
 ```bash
-pi install git:github.com/obra/superpowers
+pi install git:github.com/eyildirim82/adaptive-superpowers
 ```
 
 For local development, run Pi with this checkout loaded as a temporary package:
@@ -251,7 +265,7 @@ The Pi package loads the Superpowers skills and a small extension that injects t
 Install Superpowers as a Hermes plugin from this repository:
 
 ```bash
-hermes plugins install obra/superpowers --enable
+hermes plugins install eyildirim82/adaptive-superpowers --enable
 ```
 
 Restart any active Hermes sessions after installing. Note: Hermes has no
@@ -260,64 +274,59 @@ turn loses the bootstrap — start a fresh session if skills stop triggering.
 
 ## The Basic Workflow
 
-1. **brainstorming** - Activates before writing code. Refines rough ideas through questions, explores alternatives, presents design in sections for validation. Saves design document.
+The workflow is selected by the active execution profile rather than forced as one universal pipeline:
 
-2. **using-git-worktrees** - Activates after design approval. Creates isolated workspace on new branch, runs project setup, verifies clean test baseline.
+1. **using-superpowers** — routes intent through the Risk Router and establishes the execution profile.
+2. **brainstorming** — explores product/design uncertainty when the profile or task actually needs it; FAST/STANDARD work has no blanket implementation-approval stop.
+3. **writing-plans** — uses `none`, `lightweight`, or `persistent` planning depth. Canonical plans stay concise; worker briefs carry task-specific detail.
+4. **test-driven-development** and **systematic-debugging** — apply at `opportunistic`, `default`, or `strict` / `short-root-cause`, `evidence-driven`, or `full-tracing` strength.
+5. **using-git-worktrees**, **dispatching-parallel-agents**, and **subagent-driven-development** — isolate or parallelize only when the profile and coordination economics justify it. CRITICAL parallel lanes require explicit ownership contracts.
+6. **requesting-code-review** — self-review, risk-based review, or independent review according to risk and diff impact; UI visual review and engineering review are composed rather than duplicated blindly.
+7. **verification-before-completion** — always enforces Evidence Before Claims at targeted, relevant, or canonical scope.
+8. **finishing-a-development-branch** — obeys Git authorization already present in the task. It neither asks again for granted effects nor silently invents push/merge/deploy permission.
 
-3. **writing-plans** - Activates with approved design. Breaks work into bite-sized tasks (2-5 minutes each). Every task has exact file paths, complete code, verification steps.
-
-4. **subagent-driven-development** or **executing-plans** - Activates with plan. Dispatches fresh subagent per task with two-stage review (spec compliance, then code quality), or executes in batches with human checkpoints.
-
-5. **test-driven-development** - Activates during implementation. Enforces RED-GREEN-REFACTOR: write failing test, watch it fail, write minimal code, watch it pass, commit. Deletes code written before tests.
-
-6. **requesting-code-review** - Activates between tasks. Reviews against plan, reports issues by severity. Critical issues block progress.
-
-7. **finishing-a-development-branch** - Activates when tasks complete. Verifies tests, presents options (merge/PR/keep/discard), cleans up worktree.
-
-**The agent checks for relevant skills before any task.** Mandatory workflows, not suggestions.
+Legacy plans that name the old skills continue to work: those names now mean “apply this capability at the active profile-selected strength,” not “override the orchestrator with unconditional ceremony.”
 
 ## Community
 
-Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the rest of the folks at [Prime Radiant](https://primeradiant.com).
+Upstream Superpowers is built by [Jesse Vincent](https://blog.fsck.com) and the team at [Prime Radiant](https://primeradiant.com). Adaptive Superpowers preserves that attribution and layers the adaptive policy described in this repository on top.
 
 - **Discord**: [Join us](https://discord.gg/35wsABTejz) for community support, questions, and sharing what you're building with Superpowers
-- **Issues**: https://github.com/obra/superpowers/issues
+- **Upstream issues**: https://github.com/obra/superpowers/issues
 - **Release announcements**: [Sign up](https://primeradiant.com/superpowers/) to get notified about new versions
 
 ## What's Inside
 
-### Skills Library
+### Adaptive core
+- **using-superpowers** — Risk Router, risk floors, execution profiles, authorization boundaries, and legacy compatibility.
+- **verification-before-completion** — Evidence Before Claims.
+- **finishing-a-development-branch** — intent-aware Git integration and safe cleanup.
 
-**Testing**
-- **test-driven-development** - RED-GREEN-REFACTOR cycle (includes testing anti-patterns reference)
+### Engineering policies
+- **brainstorming** — adaptive design exploration.
+- **writing-plans** — adaptive plan resolution.
+- **test-driven-development** — opportunistic/default/strict TDD.
+- **systematic-debugging** — root-cause debugging scaled to risk.
+- **using-git-worktrees** — current workspace / preferred isolation / required isolation.
+- **dispatching-parallel-agents** — parallelism only when expected speedup beats coordination cost.
+- **subagent-driven-development** and **executing-plans** — profile-aware execution and recovery.
+- **requesting-code-review** / **receiving-code-review** — risk/diff-aware review.
+- **writing-skills** — behavior-tested skill authoring.
 
-**Debugging**
-- **systematic-debugging** - 4-phase root cause process (includes root-cause-tracing, defense-in-depth, condition-based-waiting techniques)
-- **verification-before-completion** - Ensure it's actually fixed
-
-**Collaboration** 
-- **brainstorming** - Socratic design refinement
-- **writing-plans** - Detailed implementation plans
-- **executing-plans** - Batch execution with checkpoints
-- **dispatching-parallel-agents** - Concurrent subagent workflows
-- **requesting-code-review** - Pre-review checklist
-- **receiving-code-review** - Responding to feedback
-- **using-git-worktrees** - Parallel development branches
-- **finishing-a-development-branch** - Merge/PR decision workflow
-- **subagent-driven-development** - Fast iteration with two-stage review (spec compliance, then code quality)
-
-**Meta**
-- **writing-skills** - Create new skills following best practices (includes testing methodology)
-- **using-superpowers** - Introduction to the skills system
+### Frontend/UI domain capability
+- **impeccable skill 4.3.1 (engine 0.1.5)** — vendored canonical UI/design skill with its own scripts, references, and agent metadata. Its Apache-2.0 license and third-party notice are preserved under `skills/impeccable/`. Adaptive integration rules live separately in `skills/using-superpowers/references/impeccable-adapter.md`, so the vendored source remains traceable to upstream.
 
 ## Philosophy
 
-- **Test-Driven Development** - Write tests first, always
-- **Systematic over ad-hoc** - Process over guessing
-- **Complexity reduction** - Simplicity as primary goal
-- **Evidence over claims** - Verify before declaring success
+- **Risk-adaptive discipline** — use the smallest process that can produce trustworthy evidence.
+- **Evidence before claims** — confidence never substitutes for fresh verification.
+- **Authorized effects only** — autonomy stops at permissions, not at arbitrary ceremony.
+- **Root cause over guessing** — debugging remains evidence-driven even when the short path is enough.
+- **TDD as a tool, not a ritual** — strict where consequence demands it, lighter where test-first has low value.
+- **Coordination has a cost** — plans, reviewers, worktrees, ledgers, and subagents are activated when their expected value exceeds their overhead.
+- **Compatibility without policy drift** — legacy skill names remain usable but cannot silently override the active execution profile.
 
-Read [the original release announcement](https://blog.fsck.com/2025/10/09/superpowers/).
+This fork preserves the upstream Superpowers MIT license and attribution. See the original project and release announcement for the methodology it builds upon.
 
 ## Contributing
 
@@ -339,7 +348,7 @@ Superpowers updates are somewhat coding-agent dependent, but are often automatic
 
 ## License
 
-MIT License - see LICENSE file for details
+The Superpowers-derived code is MIT licensed; see the root `LICENSE`. The vendored Impeccable skill is Apache-2.0 licensed and preserves its license and third-party notice under `skills/impeccable/`.
 
 ## Visual companion telemetry
 

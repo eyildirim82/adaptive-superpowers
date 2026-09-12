@@ -1,95 +1,26 @@
 ---
 name: requesting-code-review
-description: Use when completing tasks, implementing major features, or before merging to verify work meets requirements
+description: Use when a change needs an independent engineering review based on diff consequence, risk, or integration boundary.
 ---
 
 # Requesting Code Review
 
-Dispatch a code reviewer subagent to catch issues before they cascade. The reviewer gets precisely crafted context for evaluation — never your session's history.
+Review depth is selected by `review.mode = self | risk-based | independent-required`.
 
-**Core principle:** Review early, review often.
+## self — FAST
+Use implementer self-review and targeted verification. Do not dispatch an external reviewer for a trivial reversible diff merely because a task ended. A hard-risk domain (security/auth, destructive migration/data loss, irreversible effect) escalates the profile and review requirement.
 
-## When to Request Review
+## risk-based — STANDARD
+Request one independent review when the diff has meaningful behavioral/integration risk, crosses module boundaries, changes public contracts, or is large enough that a fresh perspective is worth the coordination cost. Prefer lane/feature completion as the review boundary instead of reviewing every mechanical microtask.
 
-**Mandatory:**
-- After each task in subagent-driven development
-- After completing major feature
-- Before merge to main
+## independent-required — CRITICAL
+Independent review is mandatory. Security, authorization, migration/history, data-loss, payment, and destructive-effect boundaries require review regardless of diff size. Parallel CRITICAL lanes receive lane-completion review plus coordinator integration review.
 
-**Optional but valuable:**
-- When stuck (fresh perspective)
-- Before refactoring (baseline check)
-- After fixing complex bug
+## Review package
+Provide the reviewer a precise package: requirement/spec authority, base/head or diff scope, changed files/interfaces, active risk floor/reasons, authorization constraints, and verification evidence. Do not dump unrelated session history.
 
-## How to Request
+## Findings
+- **Critical / Important:** block the affected completion/integration claim until fixed or technically adjudicated with evidence.
+- **Minor:** non-blocking by default; record or fix when cheap and in scope.
 
-**1. Get git SHAs:**
-```bash
-BASE_SHA=$(git rev-parse HEAD~1)  # or origin/main
-HEAD_SHA=$(git rev-parse HEAD)
-```
-
-**2. Dispatch code reviewer subagent:**
-
-Dispatch a `general-purpose` subagent, filling the template at [code-reviewer.md](code-reviewer.md)
-
-**Placeholders:**
-- `{DESCRIPTION}` - Brief summary of what you built
-- `{PLAN_OR_REQUIREMENTS}` - What it should do
-- `{BASE_SHA}` - Starting commit
-- `{HEAD_SHA}` - Ending commit
-
-**3. Act on feedback:**
-- Fix Critical issues immediately
-- Fix Important issues before proceeding
-- Note Minor issues for later
-- Push back if reviewer is wrong (with reasoning)
-
-## Example
-
-```
-[Just completed Task 2: Add verification function]
-
-You: Let me request code review before proceeding.
-
-BASE_SHA=$(git log --oneline | grep "Task 1" | head -1 | awk '{print $1}')
-HEAD_SHA=$(git rev-parse HEAD)
-
-[Dispatch code reviewer subagent]
-  DESCRIPTION: Added verifyIndex() and repairIndex() with 4 issue types
-  PLAN_OR_REQUIREMENTS: Task 2 from docs/superpowers/plans/deployment-plan.md
-  BASE_SHA: a7981ec
-  HEAD_SHA: 3df7661
-
-[Subagent returns]:
-  Strengths: Clean architecture, real tests
-  Issues:
-    Important: Missing progress indicators
-    Minor: Magic number (100) for reporting interval
-  Assessment: Ready to proceed
-
-You: [Fix progress indicators]
-[Continue to Task 3]
-```
-
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
-| "I'll just review the diff myself instead of dispatching a reviewer" | You're the coordinator — reviewing the diff inline burns the context window you need to keep driving the work. Dispatch a reviewer subagent: the diff and the evaluation live in its context, and only the findings come back to you. |
-| "The reviewer needs my whole session history to understand the change" | Hand it precisely crafted context, never your session's history. That keeps the reviewer on the work product, not your thought process. |
-
-## Red Flags
-
-**Never:**
-- Skip review because "it's simple"
-- Ignore Critical issues
-- Proceed with unfixed Important issues
-- Argue with valid technical feedback
-
-**If reviewer wrong:**
-- Push back with technical reasoning
-- Show code/tests that prove it works
-- Request clarification
-
-See template at: [code-reviewer.md](code-reviewer.md)
+Verify reviewer claims against code/tests. Reviewer authority does not override repository/user constraints or the execution profile.

@@ -1,0 +1,9 @@
+{
+  "expected_risk": "FAST",
+  "must_contain": [
+    "FAST"
+  ],
+  "must_not_contain": [
+    "approve the design"
+  ]
+}
