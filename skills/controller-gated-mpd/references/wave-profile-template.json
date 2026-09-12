@@ -1,0 +1,65 @@
+{
+  "schema_version": 4,
+  "protocol_version": 6,
+  "wave": "example-wave",
+  "repository": {
+    "repo": "owner/repo",
+    "trunk": "main",
+    "frozen_base_sha": "0000000000000000000000000000000000000000"
+  },
+  "adaptive": {
+    "risk_floor": "STANDARD",
+    "authorization": {
+      "push": "unknown",
+      "merge": "unknown",
+      "deploy": "unknown",
+      "production_write": "denied",
+      "destructive_action": "denied"
+    },
+    "transport": "prompt-handoff"
+  },
+  "verification": {
+    "workflow": {
+      "name": "Full CI",
+      "path": ".github/workflows/ci.yml",
+      "head_event": "push",
+      "trunk_event": "push"
+    },
+    "gate_catalog": [
+      {"id": "tests", "job": "test"},
+      {"id": "typecheck", "job": "typecheck"},
+      {"id": "build", "job": "build"},
+      {"id": "security", "job": "security"}
+    ]
+  },
+  "risk_policy": {
+    "default_level": "STANDARD",
+    "levels": {
+      "FAST": {"gates": ["tests"]},
+      "STANDARD": {"gates": ["tests", "typecheck", "build"]},
+      "CRITICAL": {"gates": ["tests", "typecheck", "build", "security"]}
+    },
+    "path_floors": [
+      {"level": "CRITICAL", "paths": ["src/auth/**", "supabase/migrations/**", ".github/workflows/**"]},
+      {"level": "STANDARD", "paths": ["src/**", "app/**", "package.json"]},
+      {"level": "FAST", "paths": ["docs/**", "README.md"]}
+    ]
+  },
+  "hot_zones": [],
+  "lanes": [
+    {
+      "id": "lane-a",
+      "branch": "agent/lane-a",
+      "risk": "STANDARD",
+      "prerequisites": [],
+      "owned": ["src/feature/**"],
+      "forbidden": [],
+      "downstream": []
+    }
+  ],
+  "merge": {
+    "method": "squash",
+    "approvals_dir": ".superpowers/mpd/example-wave/approvals",
+    "trunk_green_after_each": true
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: Controller-Gated MPD
+  short_description: Use for controlled multi-branch and multi-PR integration waves.
+  default_prompt: Use Adaptive Superpowers with Controller-Gated MPD for this multi-lane integration task.
