@@ -1,0 +1,77 @@
+name: Publish Adaptive Superpowers rc2
+
+on:
+  push:
+    paths:
+      - ".github/workflows/publish-adaptive-rc2.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    if: startsWith(github.event.head_commit.message, 'ci: stage Adaptive Superpowers rc2')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Apply exact rc2 patch
+        shell: bash
+        run: |
+          set -euo pipefail
+          base64 -d .release-rc2/adaptive-rc2.patch.xz.b64 > /tmp/adaptive-rc2.patch.xz
+          echo "4116361dd0e3dae380e06dcbc42ca298eae84ea0f10b00127bb15dc8b5ec9115  /tmp/adaptive-rc2.patch.xz" | sha256sum -c -
+          xz -dc /tmp/adaptive-rc2.patch.xz > /tmp/adaptive-rc2.patch
+          echo "190e11b2516876905f4a9f060962450dfa5d6bb82096228bb6bbc3b64c263a66  /tmp/adaptive-rc2.patch" | sha256sum -c -
+          git apply --check /tmp/adaptive-rc2.patch
+          git apply /tmp/adaptive-rc2.patch
+
+      - name: Commit rc2 tree for package verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "build: stage Adaptive Superpowers OpenAI plugin rc2"
+
+      - name: Verify rc2
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 -m json.tool .codex-plugin/plugin.json >/dev/null
+          python3 -m json.tool .agents/plugins/marketplace.json >/dev/null
+          python - <<'PY'
+          import importlib.util, subprocess, sys
+          if importlib.util.find_spec("pytest") is None:
+              subprocess.check_call([sys.executable, "-m", "pip", "install", "pytest"])
+          PY
+          bash tests/adaptive-orchestrator/test-policy-contracts.sh
+          bash tests/hooks/test-session-start.sh
+          bash tests/codex/test-marketplace-manifest.sh
+          bash tests/codex/test-package-codex-plugin.sh
+          bash tests/codex-plugin-sync/test-sync-to-codex-plugin.sh
+          bash tests/kimi/run-tests.sh
+          bash tests/opencode/run-tests.sh
+          node --experimental-strip-types tests/pi/test-pi-extension.mjs
+          pytest -q tests/hermes
+          bash tests/antigravity/run-tests.sh
+          bash tests/devin/test-devin-plugin.sh
+          bash tests/claude-code/test-worktree-path-policy.sh
+          bash tests/claude-code/test-sdd-workspace.sh
+          git diff --check
+
+      - name: Publish main and rc2 tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git rm .github/workflows/publish-adaptive-rc2.yml
+          git rm .release-rc2/adaptive-rc2.patch.xz.b64
+          git commit -m "chore: finalize Adaptive Superpowers rc2 publication"
+          git push origin HEAD:main
+          git tag -f adaptive-v0.1.0-rc2
+          git push -f origin refs/tags/adaptive-v0.1.0-rc2
