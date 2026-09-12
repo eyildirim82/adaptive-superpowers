@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   publish:
-    if: startsWith(github.event.head_commit.message, 'ci: stage Adaptive Superpowers rc2')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
