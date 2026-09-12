@@ -74,3 +74,5 @@ jobs:
           git push origin HEAD:main
           git tag -f adaptive-v0.1.0-rc2
           git push -f origin refs/tags/adaptive-v0.1.0-rc2
+
+# trigger via Git data ref update
