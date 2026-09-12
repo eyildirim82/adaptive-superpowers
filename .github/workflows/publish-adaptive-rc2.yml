@@ -21,9 +21,9 @@ jobs:
         run: |
           set -euo pipefail
           base64 -d .release-rc2/adaptive-rc2.patch.xz.b64 > /tmp/adaptive-rc2.patch.xz
-          echo "4116361dd0e3dae380e06dcbc42ca298eae84ea0f10b00127bb15dc8b5ec9115  /tmp/adaptive-rc2.patch.xz" | sha256sum -c -
+          echo "edc4a42743efcb427cfb34455740788ceee53118f664b6007450a6005492600e  /tmp/adaptive-rc2.patch.xz" | sha256sum -c -
           xz -dc /tmp/adaptive-rc2.patch.xz > /tmp/adaptive-rc2.patch
-          echo "190e11b2516876905f4a9f060962450dfa5d6bb82096228bb6bbc3b64c263a66  /tmp/adaptive-rc2.patch" | sha256sum -c -
+          echo "d747aa50c4b28c27c960f24e79859504c682f31db5f31ccd8a4c1d2d4d95b314  /tmp/adaptive-rc2.patch" | sha256sum -c -
           git apply --check /tmp/adaptive-rc2.patch
           git apply /tmp/adaptive-rc2.patch
 
@@ -75,4 +75,4 @@ jobs:
           git tag -f adaptive-v0.1.0-rc2
           git push -f origin refs/tags/adaptive-v0.1.0-rc2
 
-# trigger via Git data ref update
+# trigger v2 against exact remote main context
