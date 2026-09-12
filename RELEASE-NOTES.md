@@ -2,6 +2,13 @@
 
 ## Adaptive fork release (2026-09-13) — based on Superpowers v6.3.0
 
+### OpenAI Plugin Distribution (`0.1.0-rc2`)
+
+- Published a distinct `adaptive-superpowers` OpenAI plugin identity instead of inheriting the upstream `superpowers` name/version/author metadata.
+- Updated `.agents/plugins/marketplace.json` to the current canonical same-repository `source: local` / `path: ./` shape used by OpenAI's plugin tooling.
+- Added ChatGPT workspace-import instructions and Codex App/CLI installation guidance for the adaptive fork.
+- Kept the plugin skills-only: no MCP server or app binding is declared, avoiding an unnecessary desktop-only dependency.
+
 ### Adaptive Orchestrator
 
 - Replaced unconditional process ceremony with **FAST / STANDARD / CRITICAL** execution profiles selected by a hybrid Risk Router.

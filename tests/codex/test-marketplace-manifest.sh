@@ -22,10 +22,10 @@ def assert_equal(actual, expected, label):
     if actual != expected:
         raise AssertionError(f"{label}: expected {expected!r}, got {actual!r}")
 
-assert_equal(marketplace.get("name"), "superpowers-dev", "marketplace name")
+assert_equal(marketplace.get("name"), "adaptive-superpowers", "marketplace name")
 assert_equal(
     marketplace.get("interface", {}).get("displayName"),
-    "Superpowers Dev",
+    "Adaptive Superpowers",
     "marketplace display name",
 )
 
@@ -33,11 +33,11 @@ plugins = marketplace.get("plugins")
 if not isinstance(plugins, list):
     raise AssertionError("plugins must be a list")
 
-matching_plugins = [plugin for plugin in plugins if plugin.get("name") == "superpowers"]
-assert_equal(len(matching_plugins), 1, "superpowers plugin entry count")
+matching_plugins = [plugin for plugin in plugins if plugin.get("name") == "adaptive-superpowers"]
+assert_equal(len(matching_plugins), 1, "adaptive-superpowers plugin entry count")
 
 plugin = matching_plugins[0]
-assert_equal(plugin.get("source"), {"source": "url", "url": "./"}, "plugin source")
+assert_equal(plugin.get("source"), {"source": "local", "path": "./"}, "plugin source")
 assert_equal(
     plugin.get("policy"),
     {"installation": "AVAILABLE", "authentication": "ON_INSTALL"},
@@ -51,6 +51,11 @@ if not plugin_manifest.exists():
 
 manifest = json.loads(plugin_manifest.read_text(encoding="utf-8"))
 assert_equal(manifest.get("name"), plugin.get("name"), "plugin manifest name")
+assert_equal(manifest.get("version"), "0.1.0-rc2", "plugin manifest version")
+assert_equal(manifest.get("repository"), "https://github.com/eyildirim82/adaptive-superpowers", "plugin repository")
+assert_equal(manifest.get("homepage"), "https://github.com/eyildirim82/adaptive-superpowers", "plugin homepage")
+assert_equal(manifest.get("interface", {}).get("displayName"), "Adaptive Superpowers", "plugin display name")
+assert_equal(manifest.get("interface", {}).get("developerName"), "eyildirim82", "plugin developer name")
 
 # Codex auto-discovers a plugin's hooks/hooks.json whenever the Codex manifest
 # has no `hooks` field: load_plugin_hooks falls back to a hardcoded
@@ -71,6 +76,19 @@ assert_equal(
     {},
     "Codex manifest must declare empty hooks {} to suppress hooks/hooks.json auto-discovery",
 )
+
+
+readme = repo_root / "README.md"
+if not readme.exists():
+    raise AssertionError("README.md must exist")
+readme_text = readme.read_text(encoding="utf-8")
+for required_text in [
+    "Workspace settings > Plugins",
+    "https://github.com/eyildirim82/adaptive-superpowers",
+    "Adaptive Superpowers",
+]:
+    if required_text not in readme_text:
+        raise AssertionError(f"README missing ChatGPT/Codex install guidance: {required_text!r}")
 
 print("Codex marketplace manifest looks good")
 PY

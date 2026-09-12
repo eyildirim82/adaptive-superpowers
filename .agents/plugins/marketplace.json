@@ -1,14 +1,14 @@
 {
-  "name": "superpowers-dev",
+  "name": "adaptive-superpowers",
   "interface": {
-    "displayName": "Superpowers Dev"
+    "displayName": "Adaptive Superpowers"
   },
   "plugins": [
     {
-      "name": "superpowers",
+      "name": "adaptive-superpowers",
       "source": {
-        "source": "url",
-        "url": "./"
+        "source": "local",
+        "path": "./"
       },
       "policy": {
         "installation": "AVAILABLE",

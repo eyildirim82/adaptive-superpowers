@@ -1,32 +1,32 @@
 {
-  "name": "superpowers",
-  "version": "6.3.0",
-  "description": "An agentic skills framework & software development methodology that works: planning, TDD, debugging, and collaboration workflows.",
+  "name": "adaptive-superpowers",
+  "version": "0.1.0-rc2",
+  "description": "Risk-adaptive engineering workflows for coding agents with FAST, STANDARD, and CRITICAL execution profiles plus Impeccable UI design guidance.",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com",
-    "url": "https://github.com/obra"
+    "name": "eyildirim82",
+    "url": "https://github.com/eyildirim82"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/eyildirim82/adaptive-superpowers",
+  "repository": "https://github.com/eyildirim82/adaptive-superpowers",
   "license": "MIT",
   "keywords": [
-    "brainstorming",
-    "subagent-driven-development",
+    "adaptive-superpowers",
     "skills",
     "planning",
     "tdd",
     "debugging",
     "code-review",
-    "workflow"
+    "workflow",
+    "impeccable",
+    "risk-adaptive"
   ],
   "skills": "./skills/",
   "hooks": {},
   "interface": {
-    "displayName": "Superpowers",
-    "shortDescription": "Planning, TDD, debugging, and delivery workflows for coding agents",
-    "longDescription": "Use Superpowers to guide agent work through brainstorming, implementation planning, test-driven development, systematic debugging, parallel execution, code review, and finish-the-branch workflows.",
-    "developerName": "Jesse Vincent",
+    "displayName": "Adaptive Superpowers",
+    "shortDescription": "Risk-adaptive planning, TDD, debugging, review, and UI workflows",
+    "longDescription": "Adaptive Superpowers routes engineering work through FAST, STANDARD, or CRITICAL execution profiles, preserves evidence and authorization boundaries, keeps legacy Superpowers skills compatible, and adds Impeccable for frontend/UI design quality.",
+    "developerName": "eyildirim82",
     "category": "Developer Tools",
     "capabilities": [
       "Interactive",
@@ -34,10 +34,11 @@
       "Write"
     ],
     "defaultPrompt": [
-      "I've got an idea for something I'd like to build.",
-      "Let's add a feature to this project."
+      "Use Adaptive Superpowers for this coding task.",
+      "Classify this task as FAST, STANDARD, or CRITICAL and execute it with the appropriate safeguards.",
+      "Use Adaptive Superpowers and Impeccable to improve this interface."
     ],
-    "websiteURL": "https://github.com/obra/superpowers",
+    "websiteURL": "https://github.com/eyildirim82/adaptive-superpowers",
     "privacyPolicyURL": "https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement",
     "termsOfServiceURL": "https://docs.github.com/en/site-policy/github-terms/github-terms-of-service",
     "brandColor": "#F59E0B",

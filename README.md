@@ -9,6 +9,7 @@ Adaptive Superpowers is a risk-adaptive fork of [Superpowers](https://github.com
 - [How it works](#how-it-works)
 - [Commercial Services](#commercial-services)
 - [Getting Started](#installation)
+  - [ChatGPT](#chatgpt)
   - [Claude Code](#claude-code)
   - [Antigravity](#antigravity)
   - [Codex App](#codex-app)
@@ -57,7 +58,22 @@ If you're using Superpowers in enterprise and could benefit from commercial supp
 
 Installation differs by harness. If you use more than one, install Adaptive Superpowers separately for each one. **Official Superpowers marketplace entries point to the upstream project.** To use this adaptive fork, install from `eyildirim82/adaptive-superpowers` wherever the harness supports GitHub/direct repository installs.
 
-For Claude Code, the repository carries a marketplace manifest, so the fork can be added directly:
+### ChatGPT
+
+Adaptive Superpowers is a **skills-only OpenAI plugin**. For an eligible managed ChatGPT workspace, a workspace admin can import it directly from GitHub:
+
+1. Open **Workspace settings > Plugins**.
+2. Choose **Add > Import marketplace**.
+3. Use `https://github.com/eyildirim82/adaptive-superpowers` as the Source.
+4. Leave Path empty because `.agents/plugins/marketplace.json` is at the repository root.
+5. Use `main` for continuous updates, or pin `adaptive-v0.1.0-rc2` after that tag is published.
+6. Import the marketplace, then make **Adaptive Superpowers** Available or Installed for the intended roles.
+
+Once installed, mention it with `@Adaptive Superpowers` when that control is available, or select it from the Plugins menu. Natural coding requests can also trigger its bundled skills automatically.
+
+> GitHub marketplace import is a workspace-admin feature. Personal ChatGPT accounts may not expose custom skill/plugin import even when the Plugin Directory is visible.
+
+For Claude Code, the repository also carries its existing compatible marketplace manifest:
 
 ```bash
 /plugin marketplace add eyildirim82/adaptive-superpowers
@@ -105,29 +121,43 @@ the first message. Reinstall with the same command to update.
 
 ### Codex App
 
-Superpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).
+If your workspace imported this repository's marketplace, open **Plugins** in Codex, search for **Adaptive Superpowers**, and install/select it. Workspace plugin policy is shared with ChatGPT where that plugin is supported.
 
-- In the Codex app, click on Plugins in the sidebar.
-- You should see `Superpowers` in the Coding section.
-- Click the `+` next to Superpowers and follow the prompts.
+For a local Codex checkout that is not managed through a workspace, use the manual Codex CLI installation below.
 
 ### Codex CLI
 
-Superpowers is available via the [official Codex plugin marketplace](https://github.com/openai/plugins).
+Codex plugin discovery is marketplace-based. For a user-local installation:
 
-- Open the plugin search interface:
+```bash
+git clone https://github.com/eyildirim82/adaptive-superpowers.git ~/plugins/adaptive-superpowers
+mkdir -p ~/.agents/plugins
+```
 
-  ```bash
-  /plugins
-  ```
+Create or merge this entry into `~/.agents/plugins/marketplace.json`:
 
-- Search for Superpowers:
+```json
+{
+  "name": "local",
+  "interface": { "displayName": "Local Plugins" },
+  "plugins": [
+    {
+      "name": "adaptive-superpowers",
+      "source": {
+        "source": "local",
+        "path": "./plugins/adaptive-superpowers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}
+```
 
-  ```bash
-  superpowers
-  ```
-
-- Select `Install Plugin`.
+Restart Codex, open `/plugins`, search for **Adaptive Superpowers**, and install it. If you already have a user marketplace, append the plugin entry instead of replacing the whole file.
 
 ### Cursor
 
