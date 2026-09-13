@@ -73,6 +73,13 @@ Once installed, mention it with `@Adaptive Superpowers` when that control is ava
 
 > GitHub marketplace import is a workspace-admin feature. Personal ChatGPT accounts may not expose custom skill/plugin import even when the Plugin Directory is visible.
 
+
+#### Prompt-Handoff Parallelism in ChatGPT
+
+When Adaptive Superpowers routes a genuine multi-branch or multi-PR convergence problem to **Controller-Gated MPD**, ordinary ChatGPT conversations use **Prompt-Handoff Parallelism** unless the runtime actually exposes isolated worker dispatch. The coordinator generates complete zero-context worker prompts for separate ChatGPT windows plus a coordinator contract; it does **not** claim that workers or agents were started.
+
+Worker replies are navigation hints only. The coordinator independently re-checks Git/PR/Actions state before exact-head evidence or `READY@SHA` can be issued. Dependency-blocked lanes stay blocked until the canonical `.superpowers/mpd/<wave>/` ledger contains independently verified prerequisite state. Merge mutation remains separate from READY and requires `adaptive.authorization.merge == granted`.
+
 For Claude Code, the repository also carries its existing compatible marketplace manifest:
 
 ```bash

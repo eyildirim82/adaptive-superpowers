@@ -1,5 +1,16 @@
 # Superpowers Release Notes
 
+
+## Adaptive fork release candidate (2026-09-13) — `0.2.0-rc1` candidate
+
+### Controller-Gated MPD V6
+
+- Added **Controller-Gated MPD** as an Adaptive-native distributed integration engine for frozen-base, multi-branch/multi-PR convergence while keeping the Adaptive Orchestrator as the sole risk and effect-authorization authority.
+- Added ChatGPT **Prompt-Handoff Parallelism**: separate zero-context worker prompts are generated when native isolated dispatch is unavailable, and worker prose never becomes READY/evidence authority.
+- Migrated the MPD protocol to schema/protocol **4/6** with FAST/STANDARD/CRITICAL risk floors, exact-head Actions metadata, run-attempt binding, V6-only `READY@SHA`, canonical wave-ledger recovery, and explicit V5 non-upgradability.
+- Hardened the serialized merge train so `--apply` mutates only with explicit Adaptive merge authorization and provider/CLI authority reads fail closed before mutation, at merge confirmation, and during post-merge trunk proof.
+- Added deterministic prompt, routing/ledger, evidence/READY, integration-contract, and merge-train suites. The 18 approved behavioral scenarios are catalogued for live evals; scenarios not executed through a live agent runner remain explicitly **NOT RUN** rather than inferred from static tests.
+
 ## Adaptive fork release (2026-09-13) — based on Superpowers v6.3.0
 
 ### OpenAI Plugin Distribution (`0.1.0-rc2`)

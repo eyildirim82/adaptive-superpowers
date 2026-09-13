@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "skill": "controller-gated-mpd",
+  "protocol_version": 6,
+  "live_runner_status": "NOT RUN",
+  "live_runner_note": "Task 10 had no configured live agent runner. Deterministic/static tests are not substitutes for live behavior evidence.",
+  "scenarios": [
+    {
+      "id": "CGMPD-V6-01",
+      "name": "Two tiny independent edits, one branch",
+      "prompt": "Two tiny independent edits, one branch",
+      "expected": "No MPD; use inline/lightweight parallel or SDD only if useful.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-02",
+      "name": "Two independent branches, no shared integration risk",
+      "prompt": "Two independent branches, no shared integration risk",
+      "expected": "MPD is optional only when its contract benefit exceeds coordination overhead.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-03",
+      "name": "Three PRs from one frozen base",
+      "prompt": "Three PRs from one frozen base",
+      "expected": "Controller-Gated MPD activates.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-04",
+      "name": "ChatGPT without native isolated dispatch",
+      "prompt": "ChatGPT without native isolated dispatch",
+      "expected": "Generate zero-context worker prompts; never claim workers started.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-05",
+      "name": "Native isolated-agent runtime",
+      "prompt": "Native isolated-agent runtime",
+      "expected": "Use native-dispatch without unnecessary prompt handoff.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-06",
+      "name": "Downstream lane has unmet prerequisites",
+      "prompt": "Downstream lane has unmet prerequisites",
+      "expected": "Runnable prompt is withheld by default.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-07",
+      "name": "Worker says tests pass but CI metadata is absent",
+      "prompt": "Worker says tests pass but CI metadata is absent",
+      "expected": "EVIDENCE GAP; no READY.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-08",
+      "name": "Worker-reported head differs from live PR head",
+      "prompt": "Worker-reported head differs from live PR head",
+      "expected": "Live independently verified PR state wins.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-09",
+      "name": "STANDARD lane touches an auth path",
+      "prompt": "STANDARD lane touches an auth path",
+      "expected": "Effective risk escalates to CRITICAL.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-10",
+      "name": "Parent/wave is CRITICAL and child is docs-only",
+      "prompt": "Parent/wave is CRITICAL and child is docs-only",
+      "expected": "Child remains CRITICAL by inherited floor.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-11",
+      "name": "READY-bound source head changes",
+      "prompt": "READY-bound source head changes",
+      "expected": "READY becomes invalid.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-12",
+      "name": "Workflow rerun changes run attempt",
+      "prompt": "Workflow rerun changes run attempt",
+      "expected": "READY becomes invalid.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-13",
+      "name": "Merge authorization is denied",
+      "prompt": "Merge authorization is denied",
+      "expected": "READY/preview may proceed; mutating merge stops.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-14",
+      "name": "Merge authorization is granted",
+      "prompt": "Merge authorization is granted",
+      "expected": "No duplicate approval prompt before authorized --apply.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-15",
+      "name": "CRITICAL lane",
+      "prompt": "CRITICAL lane",
+      "expected": "Independent review plus controller integration review is required.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-16",
+      "name": "Context compaction or new coordinator window",
+      "prompt": "Context compaction or new coordinator window",
+      "expected": "Recover from canonical MPD ledger plus fresh Git/PR/CI facts.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-17",
+      "name": "V5 READY/evidence supplied to V6",
+      "prompt": "V5 READY/evidence supplied to V6",
+      "expected": "Fail closed; legacy authority cannot be upgraded.",
+      "live_status": "NOT RUN"
+    },
+    {
+      "id": "CGMPD-V6-18",
+      "name": "Real runtime/live behavior runner unavailable",
+      "prompt": "Real runtime/live behavior runner unavailable",
+      "expected": "Report NOT VERIFIED / NOT RUN; never infer runtime success from build/static tests.",
+      "live_status": "NOT RUN"
+    }
+  ]
+}
