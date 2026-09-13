@@ -1,7 +1,7 @@
 # Superpowers Release Notes
 
 
-## Adaptive fork release candidate (2026-09-13) — `0.2.0-rc1` candidate
+## Adaptive fork release candidate (2026-09-13) — `0.2.0-rc1`
 
 ### Controller-Gated MPD V6
 

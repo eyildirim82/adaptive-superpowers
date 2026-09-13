@@ -51,7 +51,7 @@ if not plugin_manifest.exists():
 
 manifest = json.loads(plugin_manifest.read_text(encoding="utf-8"))
 assert_equal(manifest.get("name"), plugin.get("name"), "plugin manifest name")
-assert_equal(manifest.get("version"), "0.1.0-rc2", "plugin manifest version")
+assert_equal(manifest.get("version"), "0.2.0-rc1", "plugin manifest version")
 assert_equal(manifest.get("repository"), "https://github.com/eyildirim82/adaptive-superpowers", "plugin repository")
 assert_equal(manifest.get("homepage"), "https://github.com/eyildirim82/adaptive-superpowers", "plugin homepage")
 assert_equal(manifest.get("interface", {}).get("displayName"), "Adaptive Superpowers", "plugin display name")

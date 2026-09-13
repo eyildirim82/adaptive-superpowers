@@ -66,7 +66,7 @@ Adaptive Superpowers is a **skills-only OpenAI plugin**. For an eligible managed
 2. Choose **Add > Import marketplace**.
 3. Use `https://github.com/eyildirim82/adaptive-superpowers` as the Source.
 4. Leave Path empty because `.agents/plugins/marketplace.json` is at the repository root.
-5. Use `main` for continuous updates, or pin `adaptive-v0.1.0-rc2` after that tag is published.
+5. Use `main` for continuous updates, or pin `adaptive-v0.2.0-rc1` for this release candidate.
 6. Import the marketplace, then make **Adaptive Superpowers** Available or Installed for the intended roles.
 
 Once installed, mention it with `@Adaptive Superpowers` when that control is available, or select it from the Plugins menu. Natural coding requests can also trigger its bundled skills automatically.
