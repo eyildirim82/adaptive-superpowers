@@ -46,6 +46,28 @@ assert_contains skills/finishing-a-development-branch/SKILL.md "known denied eff
 assert_contains skills/finishing-a-development-branch/SKILL.md "without asking the same permission again"
 assert_not_contains skills/finishing-a-development-branch/SKILL.md "present exactly these 3 options"
 
+# Controller-Gated MPD adapter / Task 8 routing contracts
+assert_exists skills/using-superpowers/references/controller-gated-mpd-adapter.md
+assert_contains skills/using-superpowers/SKILL.md "single top-level authority"
+assert_contains skills/using-superpowers/SKILL.md "controller-gated-mpd"
+assert_contains skills/using-superpowers/SKILL.md "prompt-handoff"
+assert_contains skills/using-superpowers/SKILL.md "native-dispatch"
+assert_contains skills/using-superpowers/SKILL.md ".superpowers/mpd/<wave>/"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "one branch + two small independent edits"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "three PRs from one frozen base"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "Worker prompts were generated for separate ChatGPT windows."
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "workers started"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "3 agents running"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "CRITICAL parent/wave keeps a docs-only child CRITICAL"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "stop before merge mutation"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "worker_report.reported_head_sha"
+assert_contains skills/using-superpowers/references/controller-gated-mpd-adapter.md "verified_pr.head_sha"
+assert_contains skills/using-superpowers/references/risk-policy.md "minimum STANDARD coordination floor"
+assert_contains skills/using-superpowers/references/risk-policy.md "does **not** by itself create a user approval gate"
+assert_contains skills/dispatching-parallel-agents/SKILL.md "real multi-branch/multi-PR convergence problem"
+assert_contains skills/subagent-driven-development/SKILL.md 'do not create `.superpowers/sdd/<plan>/`'
+assert_contains skills/using-git-worktrees/SKILL.md "exact frozen-base contract"
+
 if (( failures > 0 )); then
   printf 'STATUS: FAILED (%d contract violations)\n' "$failures" >&2
   exit 1

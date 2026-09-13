@@ -21,6 +21,14 @@ Parallelize only when all are true:
 
 Batch small same-shape edits into one worker instead of one agent per file/task.
 
+## Engine boundary
+
+This skill owns lightweight parallel execution, not distributed integration authority. One branch with two small independent edits stays here (or inline/SDD); do not activate Controller-Gated MPD merely because more than one task exists.
+
+Route back to the Adaptive Superpowers Orchestrator when the work becomes a real multi-branch/multi-PR convergence problem: multiple branches or PRs must converge on one trunk, lanes share a frozen base, dependency ordering/DAG state matters, ownership or reserved identifiers must be machine-coordinated, exact-head evidence is required, or integration must run as a serialized merge train. The orchestrator may then select `controller-gated-mpd`.
+
+Transport descriptions must match runtime facts. Use `native-dispatch` only when isolated worker launch is actually available. In ordinary ChatGPT without that capability, use `prompt-handoff`; say that prompts were generated for separate ChatGPT windows, not that workers/agents are running.
+
 ## CRITICAL ownership contract
 Every lane must receive the relevant base/frozen SHA, branch/workspace, exclusive files, shared/read-only files, reserved migration/version identifiers, dependency/integration order, inherited risk floor, authorization limits, and required evidence.
 

@@ -52,6 +52,15 @@ Use compact policy modes rather than dozens of booleans:
 | verification | targeted | relevant | canonical |
 | integration | obey authorization | obey authorization | obey authorization |
 
+For parallel work, also resolve the transport and engine from actual runtime capability and integration shape:
+
+```yaml
+parallelism:
+  mode: off | net-benefit | contract-required
+  transport: none | native-dispatch | prompt-handoff
+  engine: none | sdd | controller-gated-mpd
+```
+
 Risk level controls required safeguards, not document length. A one-line security boundary change can be CRITICAL; a large documentation refactor can remain STANDARD.
 
 ## Skill routing
@@ -61,6 +70,22 @@ Risk level controls required safeguards, not document length. A one-line securit
 Domain skills can be added independently of process severity. For frontend/UI intent, use the `impeccable` domain skill when available and apply `references/impeccable-adapter.md`; Adaptive risk and authorization remain authoritative.
 
 If a process skill discovers a new hard trigger, route that discovery back through the Risk Router and escalate.
+
+## Distributed integration routing
+
+The **Adaptive Superpowers Orchestrator is the single top-level authority** for risk, effect authorization, process strength, and completion claims. `controller-gated-mpd` is a specialized distributed-convergence engine, not a second orchestrator.
+
+Keep ordinary parallel work on the existing `dispatching-parallel-agents` / `subagent-driven-development` path when it stays on one branch or has no frozen-base / multi-PR integration contract. Activate `controller-gated-mpd` only for a real distributed convergence problem such as multiple branches/worktrees/PRs converging on one trunk, a frozen base across lanes, a dependency DAG, exclusive ownership or reserved resources, exact-head evidence, or serialized merge-train proof.
+
+When MPD is active:
+
+- use the wave risk floor as a child floor; children may escalate but never downgrade it;
+- select `native-dispatch` only when the runtime really can launch isolated workers;
+- in ordinary ChatGPT without native isolated-worker dispatch, select `prompt-handoff` and say that worker prompts were generated for separate ChatGPT windows — never claim that workers or agents were started;
+- make `.superpowers/mpd/<wave>/` the canonical ledger and suppress a parallel `.superpowers/sdd/<plan>/` ledger for the same wave;
+- keep READY/evidence state separate from effect authorization: denied or unknown merge authorization may still permit verification, READY, and a non-mutating preview, but never the merge mutation.
+
+Apply `references/controller-gated-mpd-adapter.md` whenever this engine is selected.
 
 ## User interaction
 

@@ -14,6 +14,12 @@ Isolation strength is profile-selected: `current-ok`, `isolated-preferred`, or `
 
 Creating a local reversible worktree does not require a separate approval prompt when the profile calls for isolation.
 
+## MPD frozen-base contract
+
+When Adaptive has selected Controller-Gated MPD, each lane worktree/branch must honor the wave's assigned branch and exact frozen-base contract before implementation. A moved branch, unexpected ancestry, or wrong base is a blocker to investigate; do not rebase/reset/force-push merely to make the lane look current unless that history mutation is separately authorized by the governing task.
+
+Worktree isolation does not grant push, merge, deploy, production-write, destructive-action, or history-rewrite authority. Those effects remain independently governed by Adaptive authorization.
+
 ## Detect existing isolation first
 Use `git rev-parse --git-dir`, `--git-common-dir`, `--show-superproject-working-tree`, and current branch. A linked worktree (not a submodule) already satisfies isolation; do not nest another one.
 

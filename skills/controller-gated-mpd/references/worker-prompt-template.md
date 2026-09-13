@@ -1,17 +1,26 @@
 # Worker Prompt Template
 
-A worker prompt must contain enough context to execute without access to the coordinator conversation:
+Prompt-Handoff worker prompts are **zero-context execution contracts**. The deterministic renderer owns concrete values; this reference defines the minimum content.
 
-- repository;
-- canonical spec and plan;
-- lane/task identity;
-- assigned branch/workspace;
-- frozen base SHA;
-- inherited Adaptive risk floor;
-- exclusive/shared/read-only files;
+Every worker prompt must include:
+
+- the literal framework instruction `Adaptive Superpowers + Controller-Gated MPD kullan`;
+- lane ID and exact task authority;
+- repository and trunk;
+- canonical spec, canonical plan, and canonical wave-profile pointer;
+- assigned branch/workspace and full frozen-base SHA;
+- inherited Adaptive risk floor, lane-declared risk, and effective starting floor;
+- exclusive owned paths;
+- shared/read-only paths;
+- forbidden/hot-zone paths;
 - reserved migrations/resources;
-- dependency state;
-- granted/denied/unknown effect authorization;
-- required verification;
-- explicit no-self-READY/no-self-merge rule;
-- worker result contract.
+- current prerequisite state and downstream dependency contract;
+- granted/denied/unknown effect authorization plus branch-scoped authorization boundaries, kept independent from risk;
+- required verification with `NOT VERIFIED` semantics for skipped checks;
+- explicit scope-boundary handling: shared-file/out-of-scope work becomes a coordinator blocker;
+- explicit **no self-READY** and **no self-merge** rules;
+- the worker-result envelope and the statement that worker results are not evidence.
+
+Blocked preview prompts must start with a conspicuous `DO NOT START` marker and enumerate unmet prerequisites. The ordinary rendering path must withhold blocked prompts entirely.
+
+A worker may report `READY_FOR_COORDINATOR: YES` only as a handoff hint. It never means MPD `READY@SHA`, evidence, approval, or merge authority.

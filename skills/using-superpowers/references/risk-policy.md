@@ -42,6 +42,10 @@ Escalate when any of these appears:
 
 A child task inherits the parent risk floor. It can escalate above that floor but cannot downgrade below it. When the child finishes, the coordinator returns to the parent task's profile; it does not rewrite history to claim the child was lower risk.
 
+For an active Controller-Gated MPD wave, the **minimum STANDARD coordination floor** applies. A higher Adaptive floor remains authoritative: a **CRITICAL** wave makes every child at least CRITICAL even when a child changes only documentation. Lane declarations and path floors may raise the effective risk but may never lower the inherited wave floor.
+
+Risk escalation strengthens testing, review, isolation, evidence, and verification. It does **not** by itself create a user approval gate or grant/deny an external effect; authorization remains an independent Adaptive decision.
+
 ## Examples
 
 - Rename button copy: FAST.
