@@ -1,11 +1,24 @@
 #!/usr/bin/env python3
-"""Create fail-closed CG-MPD V6 Actions evidence for an exact live trunk head."""
+"""Create fail-closed CG-MPD V6 Actions evidence for an exact live trunk head.
+
+Exit status contract:
+  0: exact-head trunk evidence is GREEN and was materialized
+  4: canonical metadata is not terminal/visible yet and may be retried
+  2: authority/config/evidence is invalid and must fail closed
+"""
 from __future__ import annotations
 
 import argparse
 import sys
 
-from actions_metadata import MetadataError, get_branch_head, require_full_sha, select_complete_attempt, write_json
+from actions_metadata import (
+    MetadataError,
+    MetadataPending,
+    get_branch_head,
+    require_full_sha,
+    select_latest_attempt_state,
+    write_json,
+)
 from policy import PolicyError, RISK_RANK, gates_for_level, load_profile, risk_gate_ids, sha256_file
 
 
@@ -36,7 +49,7 @@ def main() -> int:
             raise MetadataError("required gate set is empty; zero-gate authority is forbidden")
         workflow_cfg = profile["verification"]["workflow"]
         event = workflow_cfg["trunk_event"]
-        run, satisfied = select_complete_attempt(
+        run, satisfied = select_latest_attempt_state(
             args.gh,
             repo,
             workflow_cfg,
@@ -66,6 +79,9 @@ def main() -> int:
             },
         }
         write_json(args.output, evidence)
+    except MetadataPending as exc:
+        print(f"TRUNK EVIDENCE PENDING: {exc}", file=sys.stderr)
+        return 4
     except (PolicyError, MetadataError, KeyError, TypeError) as exc:
         print(f"TRUNK EVIDENCE INVALID: {exc}", file=sys.stderr)
         return 2

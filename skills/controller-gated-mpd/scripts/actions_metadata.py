@@ -14,7 +14,12 @@ class MetadataError(RuntimeError):
     """Raised when authoritative GitHub metadata is absent, ambiguous, or incomplete."""
 
 
+class MetadataPending(MetadataError):
+    """Raised only when canonical exact-head metadata exists or may appear but is not terminal yet."""
+
+
 _FULL_SHA = re.compile(r"^[0-9a-fA-F]{40}$")
+_RETRYABLE_RUN_STATUSES = {"queued", "in_progress", "waiting", "requested", "pending"}
 
 
 def require_full_sha(value: object, *, field: str) -> str:
@@ -119,16 +124,17 @@ def list_workflow_runs(
     *,
     head_sha: str,
     event: str,
+    completed_only: bool = True,
 ) -> list[dict]:
-    query = urlencode(
-        {
-            "head_sha": head_sha,
-            "event": event,
-            "status": "completed",
-            "per_page": 100,
-            "page": 1,
-        }
-    )
+    query_fields = {
+        "head_sha": head_sha,
+        "event": event,
+        "per_page": 100,
+        "page": 1,
+    }
+    if completed_only:
+        query_fields["status"] = "completed"
+    query = urlencode(query_fields)
     endpoint = f"/repos/{repo}/actions/runs?{query}"
     headers, body = gh_api(gh, endpoint)
     _reject_pagination(headers, context="workflow runs")
@@ -163,7 +169,8 @@ def _require_positive_int(value: object, *, field: str) -> int:
     return value
 
 
-def validate_run_identity(run: dict, workflow: dict, *, head_sha: str, event: str) -> tuple[int, int]:
+def validate_run_source_identity(run: dict, workflow: dict, *, head_sha: str, event: str) -> tuple[int, int]:
+    """Validate immutable/canonical workflow identity without assuming terminal status."""
     run_id = _require_positive_int(run.get("id"), field="workflow run id")
     attempt = _require_positive_int(run.get("run_attempt"), field="workflow run attempt")
     run_path = run.get("path")
@@ -171,13 +178,16 @@ def validate_run_identity(run: dict, workflow: dict, *, head_sha: str, event: st
         raise MetadataError(
             f"workflow run {run_id} identity mismatch for path: expected canonical path {workflow['path']!r}"
         )
-    expected = {
-        "name": workflow["name"],
-        "event": event,
-        "head_sha": head_sha,
-        "status": "completed",
-        "conclusion": "success",
-    }
+    expected = {"name": workflow["name"], "event": event, "head_sha": head_sha}
+    for field, value in expected.items():
+        if run.get(field) != value:
+            raise MetadataError(f"workflow run {run_id} identity mismatch for {field}: expected {value!r}")
+    return run_id, attempt
+
+
+def validate_run_identity(run: dict, workflow: dict, *, head_sha: str, event: str) -> tuple[int, int]:
+    run_id, attempt = validate_run_source_identity(run, workflow, head_sha=head_sha, event=event)
+    expected = {"status": "completed", "conclusion": "success"}
     for field, value in expected.items():
         if run.get(field) != value:
             raise MetadataError(f"workflow run {run_id} identity mismatch for {field}: expected {value!r}")
@@ -241,6 +251,58 @@ def select_complete_attempt(
     raise MetadataError("no single workflow attempt satisfied the complete required gate set")
 
 
+def select_latest_attempt_state(
+    gh: str,
+    repo: str,
+    workflow: dict,
+    *,
+    head_sha: str,
+    event: str,
+    gates: list[dict[str, str]],
+) -> tuple[dict, list[str]]:
+    """Classify the latest canonical exact-head attempt as GREEN, retryable-pending, or invalid."""
+    if not gates:
+        raise MetadataError("required gate set is empty; zero-gate authority is forbidden")
+    required = [gate["id"] for gate in gates]
+    runs = list_workflow_runs(
+        gh,
+        repo,
+        workflow,
+        head_sha=head_sha,
+        event=event,
+        completed_only=False,
+    )
+    if not runs:
+        raise MetadataPending("canonical exact-head workflow metadata is not visible yet")
+
+    candidates: list[tuple[int, int, dict]] = []
+    for run in runs:
+        try:
+            run_id, attempt = validate_run_source_identity(run, workflow, head_sha=head_sha, event=event)
+        except MetadataError:
+            continue
+        candidates.append((run_id, attempt, run))
+    if not candidates:
+        raise MetadataError("exact-head workflow runs exist but none match the canonical workflow identity")
+
+    candidates.sort(key=lambda item: (item[0], item[1]), reverse=True)
+    run_id, attempt, run = candidates[0]
+    status = run.get("status")
+    if status in _RETRYABLE_RUN_STATUSES:
+        raise MetadataPending(f"canonical workflow run {run_id}@{attempt} is still {status}")
+    if status != "completed":
+        raise MetadataError(f"canonical workflow run {run_id}@{attempt} has invalid status {status!r}")
+    if run.get("conclusion") != "success":
+        raise MetadataError(
+            f"canonical workflow run {run_id}@{attempt} completed with conclusion {run.get('conclusion')!r}"
+        )
+    jobs = get_attempt_jobs(gh, repo, run_id, attempt)
+    satisfied = satisfied_gate_ids(jobs, gates)
+    if satisfied != required:
+        raise MetadataError("latest canonical workflow attempt does not satisfy the complete required gate set")
+    return run, satisfied
+
+
 def validate_selected_attempt(
     gh: str,
     repo: str,
@@ -287,7 +349,7 @@ def write_json(path: str | Path, data: dict) -> None:
 
 def require_v6_evidence(data: dict) -> None:
     if data.get("schema_version") != 4 or data.get("protocol_version") != 6:
-        raise MetadataError(f"V6 evidence requires schema_version=4 and protocol_version=6; legacy authority is non-upgradable")
+        raise MetadataError("V6 evidence requires schema_version=4 and protocol_version=6; legacy authority is non-upgradable")
     if data.get("evidence_type") != "actions-metadata":
         raise MetadataError("V6 READY accepts only actions-metadata evidence")
     if data.get("metadata_authority") != "github-actions-jobs-steps":
@@ -295,11 +357,11 @@ def require_v6_evidence(data: dict) -> None:
     required = data.get("required_gate_ids")
     satisfied = data.get("satisfied_gate_ids")
     if not isinstance(required, list) or not required or not all(isinstance(x, str) and x for x in required):
-        raise MetadataError(f"V6 evidence required gate set is empty or invalid")
+        raise MetadataError("V6 evidence required gate set is empty or invalid")
     if satisfied != required:
         raise MetadataError("V6 evidence does not prove the complete required gate set")
     selected = data.get("selected_run")
     if not isinstance(selected, dict):
         raise MetadataError("V6 evidence selected_run is missing")
-    _require_positive_int(selected.get("id"), field="eviddence run id")
+    _require_positive_int(selected.get("id"), field="evidence run id")
     _require_positive_int(selected.get("attempt"), field="evidence run attempt")
